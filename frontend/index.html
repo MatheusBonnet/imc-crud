@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora IMC</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@2.1.0/build/pure-min.css"
+        integrity="sha384-yHIFVG6ClnONEA5yB5DJXfW2/KC173DIQrYoZMEtBvGzmf0PKiGyNEqe9N6BNDBH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            Peso: <input type="text" id="peso">
+            <br>
+            Altura: <input type="text" id="altura">
+            <br>
+            <button onclick="postCalculo()">Calcular</button>
+        </div>
+        <div class="app pure-u-1-3">
+            <h3>Resultado <span id="resultado"></span></h3>
+            <table class="pure-table">
+                <thead>
+                    <tr>
+                        <td>Tabela IMC</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr name="Muito Abaixo do Peso">
+                        <td>Muito Abaixo do Peso</td>
+                    </tr>
+                    <tr name="Abaixo do Peso">
+                        <td>Abaixo do Peso</td>
+                    </tr>
+                    <tr name="Peso Normal">
+                        <td>Peso Normal</td>
+                    </tr>
+                    <tr name="Sobre Peso">
+                        <td>Sobrepeso</td>
+                    </tr>
+                    <tr name="Obesidade Grau 1">
+                        <td>Obesidade de Grau I</td>
+                    </tr>
+                    <tr name="Obesidade Grau 2">
+                        <td>Obesidade de Grau II</td>
+                    </tr>
+                    <tr name="Obesidade Grau 3">
+                        <td>Obesidade de Grau III</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="pure-button pure-button-primary" href="/">Voltar</a>
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <script>
+        function postCalculo() {
+            resetTable();
+            let peso = document.getElementById('peso').value
+            let altura = document.getElementById('altura').value
+
+            let myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            let urlencoded = new URLSearchParams();
+            urlencoded.append("peso", peso);
+            urlencoded.append("altura", altura);
+
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: 'follow'
+            };
+
+            fetch("http://localhost:3000/imc", requestOptions)
+                .then(response => response.json())
+                .then((result) => {
+                    console.log(result)
+                    document.getElementById('resultado').innerText = result.imc
+                    classificaImc(result.text)
+                })
+                .catch(error => console.log('error', error));
+
+        }
+
+        function classificaImc(text) {
+            document.getElementsByName(text)[0].style.color = 'white';
+            document.getElementsByName(text)[0].style.backgroundColor = 'blue';
+        }
+
+        function resetTable() {
+            document.getElementsByName('Muito Abaixo do Peso')[0].style.color = 'black';
+            document.getElementsByName('Muito Abaixo do Peso')[0].style.backgroundColor = 'white';
+
+            document.getElementsByName('Abaixo do Peso')[0].style.color = 'black';
+            document.getElementsByName('Abaixo do Peso')[0].style.backgroundColor = 'white';
+
+            document.getElementsByName('Peso Normal')[0].style.color = 'black';
+            document.getElementsByName('Peso Normal')[0].style.backgroundColor = 'white';
+
+            document.getElementsByName('Sobre Peso')[0].style.color = 'black';
+            document.getElementsByName('Sobre Peso')[0].style.backgroundColor = 'white';
+
+            document.getElementsByName('Obesidade Grau 1')[0].style.color = 'black';
+            document.getElementsByName('Obesidade Grau 1')[0].style.backgroundColor = 'white';
+
+            document.getElementsByName('Obesidade Grau 2')[0].style.color = 'black';
+            document.getElementsByName('Obesidade Grau 2')[0].style.backgroundColor = 'white';
+
+            document.getElementsByName('Obesidade Grau 3')[0].style.color = 'black';
+            document.getElementsByName('Obesidade Grau 3')[0].style.backgroundColor = 'white';
+        }
+    </script>
+</body>
+
+</html>
